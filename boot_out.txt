@@ -1,0 +1,3 @@
+Adafruit CircuitPython 7.1.0-beta.1 on 2021-11-30; RP2040 Stamp with rp2040
+Board ID:solderparty_rp2040_stamp
+boot.py output:
