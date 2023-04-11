@@ -12,6 +12,7 @@ from kmk.extensions.peg_oled_Display import Oled,OledDisplayMode,OledReactionTyp
 from kmk.extensions.rgb import AnimationModes
 from kmk.extensions.lock_status import LockStatus
 from kmk.handlers.sequences import simple_key_sequence
+from kmk.extensions.wpm import WPM
 
 # Uncomment to turn off board LED
 # ixel=neopixel.NeoPixel(board.NEOPIXEL, 1)
@@ -71,7 +72,7 @@ keyboard.keymap = [
 
     # Next layer here (when you press fn button)
     [XXXXXXX, KC.MEDIA_PLAY_PAUSE, KC.MEDIA_STOP, KC.MEDIA_PREV_TRACK,  KC.MEDIA_NEXT_TRACK, KC.AUDIO_VOL_DOWN, KC.AUDIO_VOL_UP, KC.AUDIO_MUTE, XXXXXXX, KC.BRIGHTNESS_DOWN, KC.BRIGHTNESS_UP, XXXXXXX, XXXXXXX, KC.RGB_VAD, KC.RGB_VAI, XXXXXXX, XXXXXXX, XXXXXXX,
-    KC.GRAVE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+    KC.GRAVE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC.INSERT, KC.SCROLLLOCK, XXXXXXX, XXXXXXX,
     KC.TAB, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
     CAPS_WITH_FN, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
     KC.LSHIFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
@@ -85,28 +86,35 @@ keyboard.SDA=board.GP28
 oled_ext = Oled(
     OledData(
         corner_one={0:OledReactionType.STATIC,1:["layer"]},
-        corner_two={0:OledReactionType.LAYER,1:["qwerty","functions"]},
-        corner_three={0:OledReactionType.STATIC,1:["Lower"]},
-        corner_four={0:OledReactionType.STATIC,1:["NumLock"]}
+        corner_two={0:OledReactionType.LAYER,1:["1","2"]},
+        corner_three={0:OledReactionType.STATIC,1:[""]},
+        corner_four={0:OledReactionType.STATIC,1:["NumLk"]},
+        corner_five={0:OledReactionType.STATIC,1:["wpm"]},
+        corner_six={0:OledReactionType.STATIC,1:["ScrlLk"]},
         ),
         toDisplay=OledDisplayMode.TXT,flip=True)
 
 # created a class to display CapsLock/Lower or NumLock/NumUnlock on OLED
 class OLEDLockStatus(LockStatus):
     def set_lock_oled(self):
-        caps = "Lower"
-        nums = "NumLock"
+        caps = ""
+        nums = "NumLk"
+        scroll = ""
         if self.get_caps_lock():
-            caps = "CapsLock"
+            caps = "Caps"
         else:
-            caps = "Lower"
+            caps = ""
         if self.get_num_lock():
-            nums = "NumLock"
+            nums = "NumLk"
         else:
-            nums= "NumUnlock"
-
+            nums= ""
+        if self.get_scroll_lock():
+            scroll = "ScrlLk"
+        else:
+            scroll = ""
         oled_ext._views[2] = {0:OledReactionType.STATIC,1:[caps]}
         oled_ext._views[3] = {0:OledReactionType.STATIC,1:[nums]}
+        oled_ext._views[5] = {0:OledReactionType.STATIC,1:[scroll]}
 
         keyboard.sandbox.lock_update = 1
 
@@ -117,6 +125,10 @@ class OLEDLockStatus(LockStatus):
 
 keyboard.extensions.append(oled_ext)
 keyboard.extensions.append(OLEDLockStatus())
+
+wpm_ext = WPM()
+keyboard.extensions.append(wpm_ext)
+print(wpm_ext.calculate_wpm())
 
 if __name__ == '__main__':
     keyboard.go()

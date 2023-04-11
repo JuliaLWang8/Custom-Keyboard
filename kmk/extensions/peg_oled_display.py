@@ -27,11 +27,13 @@ class OledData:
         corner_two=None,
         corner_three=None,
         corner_four=None,
+        corner_five=None,
+        corner_six=None,
     ):
         if image:
             self.data = [image]
         elif corner_one and corner_two and corner_three and corner_four:
-            self.data = [corner_one, corner_two, corner_three, corner_four]
+            self.data = [corner_one, corner_two, corner_three, corner_four, corner_five, corner_six]
 
 
 class Oled(Extension):
@@ -51,6 +53,7 @@ class Oled(Extension):
         self._height = oHeight
         self._prevLayers = 0
         self._prevView = views.data
+        self._prevWPM = 0
         gc.collect()
 
     def returnCurrectRenderText(self, layer, singleView):
@@ -68,7 +71,7 @@ class Oled(Extension):
                 text=self.returnCurrectRenderText(layer, self._views[0]),
                 color=0xFFFFFF,
                 x=0,
-                y=10,
+                y=3,
             )
         )
         splash.append(
@@ -76,8 +79,8 @@ class Oled(Extension):
                 terminalio.FONT,
                 text=self.returnCurrectRenderText(layer, self._views[1]),
                 color=0xFFFFFF,
-                x=64,
-                y=10,
+                x=42,
+                y=3,
             )
         )
         splash.append(
@@ -86,7 +89,7 @@ class Oled(Extension):
                 text=self.returnCurrectRenderText(layer, self._views[2]),
                 color=0xFFFFFF,
                 x=0,
-                y=25,
+                y=22,
             )
         )
         splash.append(
@@ -94,8 +97,26 @@ class Oled(Extension):
                 terminalio.FONT,
                 text=self.returnCurrectRenderText(layer, self._views[3]),
                 color=0xFFFFFF,
-                x=64,
-                y=25,
+                x=42,
+                y=22,
+            )
+        )
+        splash.append(
+            label.Label(
+                terminalio.FONT,
+                text=self.returnCurrectRenderText(layer, self._views[4]),
+                color=0xFFFFFF,
+                x=84,
+                y=3,
+            )
+        )
+        splash.append(
+            label.Label(
+                terminalio.FONT,
+                text=self.returnCurrectRenderText(layer, self._views[5]),
+                color=0xFFFFFF,
+                x=84,
+                y=22,
             )
         )
         self._display.show(splash)
@@ -146,6 +167,9 @@ class Oled(Extension):
             self.updateOLED(sandbox)
         if sandbox.lock_update != 0:
             sandbox.lock_update = 0
+            self.updateOLED(sandbox)
+        if sandbox.wpm != self._prevWPM:
+            self._prevWPM = sandbox.wpm
             self.updateOLED(sandbox)
         return
 

@@ -28,6 +28,7 @@ class Sandbox:
     secondary_matrix_update = None
     active_layers = None
     lock_update = 0
+    wpm = 0
 
 
 class KMKKeyboard:
