@@ -1,6 +1,8 @@
+<img src="https://github.com/JuliaLWang8/Custom-Keyboard/blob/main/Keyboard.jpg" alt="Keyboard">
+
 # Custom Keyboard
 
-Using Stamp RP2040 with [kmk firmware](http://kmkfw.io/) with the layout below.
+Using RP2040 Stamp with [kmk firmware](http://kmkfw.io/) with the layout below.
 <img src="https://github.com/JuliaLWang8/Custom-Keyboard/blob/main/layout.png" alt="Full keyboard layout">
 
 
@@ -17,3 +19,6 @@ Using Stamp RP2040 with [kmk firmware](http://kmkfw.io/) with the layout below.
     - M5: paste (Ctrl+V)
 
 See [kmk/extensions](https://github.com/JuliaLWang8/Custom-Keyboard/tree/main/kmk/extensions) for full extensions classes.
+
+RP2040 stamp pinout for keyboard keymap:
+<img src="https://github.com/JuliaLWang8/Custom-Keyboard/blob/main/rp2040stamp_pinout.png" alt="rp2040 matrix">
